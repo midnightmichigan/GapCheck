@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GapCheck — free resume keyword gap analyzer</title>
+<meta name="description" content="Free, private resume keyword gap analyzer. Paste a job posting and your resume; see which keywords you cover, partially mention, or miss. Runs entirely in your browser — nothing is uploaded.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>GapCheck</h1>
+    <p>Free resume keyword gap analyzer. Paste a job posting and your resume to see which of the posting's key terms you cover, partially mention, or miss — before you apply.</p>
+    <div class="badges">
+      <span class="badge">100% private — runs in your browser</span>
+      <span class="badge">No signup</span>
+      <span class="badge">No paywall</span>
+      <span class="badge">Unlimited checks</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="honesty">
+    <strong>Use this honestly.</strong>
+    GapCheck finds gaps between a posting and your resume — it cannot create qualifications.
+    Only add a keyword to your resume if it truthfully describes you. Never invent skills,
+    titles, or experience you don't have.
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <label class="field" for="posting">Job posting <small>— paste the full text</small></label>
+      <textarea id="posting" placeholder="Paste the full job posting text here…"></textarea>
+      <div class="char-count" id="posting-count">0 characters</div>
+    </div>
+    <div class="card">
+      <label class="field" for="resume">Your resume <small>— paste as plain text</small></label>
+      <textarea id="resume" placeholder="Paste your resume text here (copy from Word, Google Docs, or your PDF)…"></textarea>
+      <div class="char-count" id="resume-count">0 characters</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="primary" id="btn-analyze">Analyze gap</button>
+    <button id="btn-sample">Load sample data</button>
+    <button id="btn-clear">Clear</button>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <div id="results">
+    <div class="card">
+      <div class="score-row">
+        <div class="score-num" id="score-num">–</div>
+        <div class="score-meta">
+          <div class="band" id="score-band"></div>
+          <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+          <div class="counts">
+            <span class="c"><span class="dot good"></span><span id="count-hit">0</span>&nbsp;covered</span>
+            <span class="c"><span class="dot warn"></span><span id="count-part">0</span>&nbsp;partially mentioned</span>
+            <span class="c"><span class="dot bad"></span><span id="count-miss">0</span>&nbsp;missing</span>
+          </div>
+          <div class="note" id="score-note"></div>
+          <div class="alias-row" id="alias-row" style="display:none">
+            Acronyms detected in this posting:
+            <span id="alias-chips"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="fixlist-card">
+      <h2 class="group" style="margin-top:0"><span class="dot bad"></span> Missing from your resume</h2>
+      <p class="group-sub">Ranked by importance in the posting. Each shows the sentence where it appears, so you can decide — truthfully — whether it belongs on your resume.</p>
+      <div class="progress-wrap">
+        <div class="progress-label" id="fixlist-label">Fix-list progress: 0 of 0 addressed</div>
+        <div class="progress-bar"><div class="progress-fill" id="fixlist-fill" style="width:0%"></div></div>
+      </div>
+      <div id="missing-list"></div>
+      <div class="toolbar" style="margin-bottom:0">
+        <button id="btn-copy">Copy fix-list as Markdown</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="group" style="margin-top:0"><span class="dot warn"></span> Partially mentioned</h2>
+      <p class="group-sub">Your resume shows part of the concept but not the whole phrase. Often the honest fix is rewording something you already do — not adding something new.</p>
+      <div id="partial-list"></div>
+    </div>
+
+    <div class="card">
+      <details class="matched-list">
+        <summary>Covered keywords (<span id="matched-n">0</span>) — click to expand</summary>
+        <div class="matched-grid" id="matched-list"></div>
+      </details>
+    </div>
+  </div>
+
+  <footer class="limits">
+    <h3>What GapCheck is and isn't</h3>
+    <ul>
+      <li><strong>What it does:</strong> statistical keyword extraction (RAKE-style) from the posting, then tolerant matching against your resume — stemming ("counts" = "counting"), word-order tolerance ("management of projects" = "project management"), and acronym equivalence parsed from the posting itself ("WMS" = "Warehouse Management System").</li>
+      <li><strong>What it doesn't do:</strong> there is no AI model here and no server. It can't judge your bullet points, predict any employer's screening software, or see the actual ATS. The score is a heuristic estimate of keyword coverage — a gap-finder, not a prediction.</li>
+      <li><strong>Privacy:</strong> everything runs in this page. Your texts are saved only in this browser's local storage (so you don't lose them on refresh) and never sent anywhere. Use Clear to wipe them.</li>
+      <li><strong>Limits:</strong> English text only; pasted plain text (it can't read PDF/DOCX files itself — copy the text out first); acronyms are only understood when the posting defines them or they're in a tiny built-in list.</li>
+    </ul>
+  </footer>
+
+</div>
+
+<script src="analyzer.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
